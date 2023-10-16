@@ -92,21 +92,16 @@ def hific_lo_compress(sample):
     sample['bpp'] = bpp
     return sample
 
-def mp3_compress(sample):
-    audio = sample['audio']['array'].unsqueeze(0)
-    fs = sample['audio']['sampling_rate']
+def mp3_compress(audio,fs):
     with BytesIO() as f:
         torchaudio.save(f, audio, sample_rate=fs, format="mp3", compression=8.0)
         f.seek(0)
-        sample['bps'] = len(f.getvalue())/len(audio[0])
+        bps = 8*len(f.getvalue())/len(audio[0])
         audio = torchaudio.load(f,format="mp3")
-    sample['audio']['array'] = audio[0][0]
-    return sample
+    return audio,bps
 
-def opus_compress(sample):
-    audio = sample['audio']['array'].unsqueeze(1)
+def opus_compress(audio,fs):
     audio = (2**15*audio.clamp(min=-1.0,max=1.0)).to(torch.int16).numpy()
-    fs = sample['audio']['sampling_rate']
     with tempfile.NamedTemporaryFile('wb', delete=True) as f:
         opuspy.write(
             path=f.name,
@@ -119,18 +114,14 @@ def opus_compress(sample):
         audio,fs = opuspy.read(f.name)
         audio = torch.tensor(audio).to(torch.float32)/(2**15)
         audio = audio.transpose(0,1)
-        sample['bps'] = os.path.getsize(f.name)/len(audio[0])
-    sample['audio']['array'] = audio[0]
-    return sample
+        bps = 8*os.path.getsize(f.name)/len(audio[0])
+    return audio, bps
 
-
-def encodec_compress(sample,model,device):
-    audio = sample['audio']['array'].unsqueeze(0)
-    fs = sample['audio']['sampling_rate']
+def encodec_compress(audio,fs,model,device):
     audio = encodec.utils.convert_audio(audio,fs,model.sample_rate,model.channels)
     with torch.no_grad():
         x = audio.unsqueeze(0).to(device)
         encoded_frames = model.encode(x)
-        sample['audio']['array'] = model.decode(encoded_frames).mean(dim=[0,1])
-        sample['bps'] = (40/8)*sum(fi[0].shape[2] for fi in encoded_frames)/sample['audio']['array'].shape[0]
-    return sample
+        audio = model.decode(encoded_frames).mean(dim=[0,1])
+        bps = (40/8)*sum(fi[0].shape[2] for fi in encoded_frames)/audio.shape[0]
+    return audio,bps
