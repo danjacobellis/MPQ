@@ -116,5 +116,5 @@ def encodec_compress(audio,fs,model,device):
         x = audio.unsqueeze(0).to(device)
         encoded_frames = model.encode(x)
         audio = model.decode(encoded_frames).mean(dim=[0,1])
-        bps = (40/8)*sum(fi[0].shape[2] for fi in encoded_frames)/audio.shape[0]
+        bps = 40*sum(fi[0].shape[2] for fi in encoded_frames)/audio.shape[0]
     return audio,bps
