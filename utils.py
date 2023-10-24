@@ -7,6 +7,7 @@ import torch.nn.functional as F
 import torchaudio
 import opuspy
 import encodec
+import datasets
 from io import BytesIO
 from torchvision import transforms
 try:
@@ -111,10 +112,28 @@ def opus_compress(audio,fs):
     return audio, bps
 
 def encodec_compress(audio,fs,model,device):
+    N = audio.numel()
+    N_samples = audio.shape[-1]
     audio = encodec.utils.convert_audio(audio,fs,model.sample_rate,model.channels)
     with torch.no_grad():
         x = audio.unsqueeze(0).to(device)
         encoded_frames = model.encode(x)
-        audio = model.decode(encoded_frames).mean(dim=[0,1])
-        bps = 40*sum(fi[0].shape[2] for fi in encoded_frames)/audio.shape[0]
+        audio = model.decode(encoded_frames)
+    codes = torch.cat([encoded[0] for encoded in encoded_frames], dim=-1)
+    audio = audio.detach().cpu()
+    audio = encodec.utils.convert_audio(audio,model.sample_rate,fs,model.channels)
+    audio = audio[0,:,0:N_samples]
+    bps = codes.numel()*model.bits_per_codebook/N
     return audio,bps
+
+def hf_audio_encode(audio,fs):
+    audio = audio.to(torch.float32).permute((1,0))
+    with tempfile.NamedTemporaryFile() as f:
+        torchaudio.save(f.name, audio, sample_rate=fs, format="wav")
+        bytes = f.file.read(-1)
+    encoded = datasets.Audio(
+        sampling_rate=fs,
+        mono=False,
+        decode=False
+    ).encode_example(value={"path" : None, "bytes": bytes})
+    return encoded
