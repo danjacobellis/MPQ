@@ -88,11 +88,14 @@ def hific_lo_compress(input_img):
 
 def mp3_compress(audio,fs):
     N = audio.numel()
+    L = audio.shape[1]
     with BytesIO() as f:
         torchaudio.save(f, audio, sample_rate=fs, format="mp3", compression=8.0)
         f.seek(0)
         bps = 8*len(f.getvalue())/N
         audio = torchaudio.load(f,format="mp3")[0]
+        audio = audio[:,1106:]
+        audio = audio[:,:L]
     return audio,bps
 
 def opus_compress(audio,fs):
@@ -106,7 +109,7 @@ def opus_compress(audio,fs):
         opuspy.write(
             path=f.name,
             waveform_tc=audio,
-            sample_rate=fs,
+            sample_rate=48000,
             bitrate=6000,
             signal_type=0,
             encoder_complexity=10
@@ -131,13 +134,12 @@ def encodec_compress(audio,fs,model,device):
     return audio,bps
 
 def hf_audio_encode(audio,fs):
-    audio = audio.to(torch.float32).permute((1,0))
     with tempfile.NamedTemporaryFile() as f:
         torchaudio.save(f.name, audio, sample_rate=fs, format="wav")
         bytes = f.file.read(-1)
-    encoded = datasets.Audio(
-        sampling_rate=fs,
-        mono=False,
-        decode=False
-    ).encode_example(value={"path" : None, "bytes": bytes})
+        encoded = datasets.Audio(
+            sampling_rate=fs,
+            mono=False,
+            decode=False
+        ).encode_example(value={"path" : None, "bytes": bytes})
     return encoded
