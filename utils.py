@@ -60,6 +60,7 @@ def nn_compress(img,net,device):
         img = rgbimg
     
     x = transforms.ToTensor()(img).unsqueeze(0)
+    orig_size = (x.size(2), x.size(3))
     x = pad(x)
     x = x.to(device)
     
@@ -67,6 +68,7 @@ def nn_compress(img,net,device):
         compressed = net.compress(x)
         recovered  = net.decompress(compressed['strings'],shape=compressed['shape'])
     recovered['x_hat'].clamp_(0, 1);
+    recovered['x_hat'] = crop(recovered['x_hat'],orig_size)
     img = transforms.ToPILImage()(recovered['x_hat'].squeeze())
     bpp = 8*sum(len(str[0]) for str in compressed['strings'])/(w*h)
     return img,bpp
