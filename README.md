@@ -101,12 +101,14 @@ We welcome contributions to this repository, whether it's in the form of additio
   volume={31},
   year={2018}
 }
+
 @article{begaint2020compressai,
   title={Compressai: a pytorch library and evaluation platform for end-to-end compression research},
   author={B{\'e}gaint, Jean and Racap{\'e}, Fabien and Feltman, Simon and Pushparaja, Akshay},
   journal={arXiv preprint arXiv:2011.03029},
   year={2020}
 }
+
 @article{mentzer2020high,
   title={High-fidelity generative image compression},
   author={Mentzer, Fabian and Toderici, George D and Tschannen, Michael and Agustsson, Eirikur},
@@ -115,18 +117,21 @@ We welcome contributions to this repository, whether it's in the form of additio
   pages={11913--11924},
   year={2020}
 }
+
 @article{balle2022tensorflow,
   title={TensorFlow compression: Learned data compression},
   author={Ball{\'e}, Johannes and Hwang, Sung Jin and Agustsson, Eirikur},
   journal={TensorFlow Compression: Learned data compression},
   year={2022}
 }
+
 @article{defossez2022high,
   title={High fidelity neural audio compression},
   author={D{\'e}fossez, Alexandre and Copet, Jade and Synnaeve, Gabriel and Adi, Yossi},
   journal={arXiv preprint arXiv:2210.13438},
   year={2022}
 }
+
 @article{dosovitskiy2020image,
   title={An image is worth 16x16 words: Transformers for image recognition at scale},
   author={Dosovitskiy, Alexey and Beyer, Lucas and Kolesnikov, Alexander and Weissenborn, Dirk and Zhai, Xiaohua and Unterthiner, Thomas and Dehghani, Mostafa and Minderer, Matthias and Heigold, Georg and Gelly, Sylvain and others},
@@ -215,6 +220,7 @@ We welcome contributions to this repository, whether it's in the form of additio
   pages={586--595},
   year={2018}
 }
+
 @misc{kastryulin2022piq,
   title = {PyTorch Image Quality: Metrics for Image Quality Assessment},
   url = {https://arxiv.org/abs/2208.14818},
@@ -223,6 +229,7 @@ We welcome contributions to this repository, whether it's in the form of additio
   publisher = {arXiv},
   year = {2022}
 }
+
 @misc{piq,
   title={{PyTorch Image Quality}: Metrics and Measure for Image Quality Assessment},
   url={https://github.com/photosynthesis-team/piq},
@@ -230,6 +237,7 @@ We welcome contributions to this repository, whether it's in the form of additio
   author={Sergey Kastryulin and Dzhamil Zakirov and Denis Prokopenko},
   year={2019}
 }
+
 @inproceedings{manocha2021cdpam,
   title={CDPAM: Contrastive learning for perceptual audio similarity},
   author={Manocha, Pranay and Jin, Zeyu and Zhang, Richard and Finkelstein, Adam},
