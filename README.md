@@ -85,7 +85,7 @@ Our study also incorporates advanced deep similarity metrics to assess the perce
 
 ## Usage
 
-To replicate the experiments or to evaluate your own models with the provided compression methods, please refer to the individual dataset and model links for setup and usage instructions.
+To replicate the experiments or to evaluate your own models with the provided compression methods, please refer to the individual dataset and model links for setup and usage instructions, then run the notebook corresponding to the desired experiment.
 
 ## Contributing
 
@@ -215,7 +215,21 @@ We welcome contributions to this repository, whether it's in the form of additio
   pages={586--595},
   year={2018}
 }
-
+@misc{kastryulin2022piq,
+  title = {PyTorch Image Quality: Metrics for Image Quality Assessment},
+  url = {https://arxiv.org/abs/2208.14818},
+  author = {Kastryulin, Sergey and Zakirov, Jamil and Prokopenko, Denis and Dylov, Dmitry V.},
+  doi = {10.48550/ARXIV.2208.14818},
+  publisher = {arXiv},
+  year = {2022}
+}
+@misc{piq,
+  title={{PyTorch Image Quality}: Metrics and Measure for Image Quality Assessment},
+  url={https://github.com/photosynthesis-team/piq},
+  note={Open-source software available at https://github.com/photosynthesis-team/piq},
+  author={Sergey Kastryulin and Dzhamil Zakirov and Denis Prokopenko},
+  year={2019}
+}
 @inproceedings{manocha2021cdpam,
   title={CDPAM: Contrastive learning for perceptual audio similarity},
   author={Manocha, Pranay and Jin, Zeyu and Zhang, Richard and Finkelstein, Adam},
